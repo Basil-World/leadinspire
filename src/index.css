@@ -9,56 +9,56 @@
 
 @layer base {
   :root {
-    /* Deep Space Theme */
-    --background: 225 39% 8%;              /* Deep space black */
-    --foreground: 210 100% 92%;            /* Bright stellar white */
+    /* Darker Deep Space Theme */
+    --background: 225 39% 4%;              /* Much darker space black */
+    --foreground: 210 100% 95%;            /* Bright white text */
 
-    /* Glass Cards */
-    --card: 225 39% 12%;                   /* Dark glass surface */
-    --card-foreground: 210 100% 92%;      /* Clear white text */
+    /* Darker Glass Cards */
+    --card: 225 39% 6%;                    /* Very dark glass surface */
+    --card-foreground: 210 100% 95%;      /* Clear white text */
 
-    --popover: 225 39% 10%;
-    --popover-foreground: 210 100% 92%;
+    --popover: 225 39% 5%;
+    --popover-foreground: 210 100% 95%;
 
-    /* Cosmic Blue Primary */
-    --primary: 217 91% 65%;                /* Bright cosmic blue */
-    --primary-foreground: 225 39% 8%;     /* Dark text on blue */
+    /* Softer Blue Primary */
+    --primary: 217 85% 55%;                /* Slightly muted cosmic blue */
+    --primary-foreground: 225 39% 4%;     /* Dark text on blue */
 
-    /* Subtle Glass Secondary */
-    --secondary: 225 20% 18%;              /* Subtle glass */
-    --secondary-foreground: 210 80% 85%;  /* Light stellar text */
+    /* Darker Glass Secondary */
+    --secondary: 225 20% 12%;              /* Darker glass */
+    --secondary-foreground: 210 80% 90%;  /* Light text */
 
-    /* Muted Space Elements */
-    --muted: 225 20% 15%;                  /* Darker glass */
-    --muted-foreground: 210 40% 65%;      /* Dim stellar text */
+    /* Darker Muted Elements */
+    --muted: 225 20% 8%;                   /* Very dark glass */
+    --muted-foreground: 210 40% 70%;      /* Muted text */
 
-    /* Glowing Accent */
-    --accent: 195 100% 60%;                /* Bright cyan accent */
-    --accent-foreground: 225 39% 8%;      /* Dark text */
+    /* Subtle Accent */
+    --accent: 195 80% 50%;                 /* More subtle cyan */
+    --accent-foreground: 225 39% 4%;      /* Dark text */
 
     /* Alert Colors */
-    --destructive: 0 85% 60%;
-    --destructive-foreground: 210 100% 92%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 210 100% 95%;
 
-    /* Borders & Inputs */
-    --border: 225 20% 20%;                 /* Subtle glass borders */
-    --input: 225 20% 15%;                  /* Input backgrounds */
-    --ring: 217 91% 65%;                   /* Focus rings */
+    /* Darker Borders & Inputs */
+    --border: 225 20% 15%;                 /* Darker borders */
+    --input: 225 20% 8%;                   /* Darker inputs */
+    --ring: 217 85% 55%;                   /* Focus rings */
 
-    /* Design System Extensions */
-    --glass: 225 20% 18% / 0.3;           /* Glassmorphism overlay */
-    --glow: 217 91% 65% / 0.4;            /* Blue glow effect */
-    --stellar-glow: 195 100% 60% / 0.6;   /* Cyan stellar glow */
+    /* Enhanced Design System */
+    --glass: 225 20% 12% / 0.4;           /* Stronger glassmorphism */
+    --glow: 217 85% 55% / 0.3;            /* Subtler glow */
+    --stellar-glow: 195 80% 50% / 0.4;    /* Subtler stellar glow */
     
-    /* Gradients */
-    --gradient-cosmic: linear-gradient(135deg, hsl(225 39% 8%), hsl(225 39% 12%), hsl(217 91% 15%));
-    --gradient-glass: linear-gradient(135deg, hsl(225 20% 18% / 0.4), hsl(225 20% 22% / 0.2));
-    --gradient-stellar: linear-gradient(90deg, hsl(217 91% 65%), hsl(195 100% 60%));
+    /* Darker Gradients */
+    --gradient-cosmic: linear-gradient(135deg, hsl(225 39% 3%), hsl(225 39% 6%), hsl(217 85% 8%));
+    --gradient-glass: linear-gradient(135deg, hsl(225 20% 12% / 0.5), hsl(225 20% 15% / 0.3));
+    --gradient-stellar: linear-gradient(90deg, hsl(217 85% 55%), hsl(195 80% 50%));
     
-    /* Shadows */
-    --shadow-glow: 0 0 30px hsl(var(--glow));
-    --shadow-stellar: 0 0 20px hsl(var(--stellar-glow));
-    --shadow-glass: 0 8px 32px hsl(225 39% 4% / 0.4);
+    /* Subtle Shadows */
+    --shadow-glow: 0 0 25px hsl(var(--glow));
+    --shadow-stellar: 0 0 15px hsl(var(--stellar-glow));
+    --shadow-glass: 0 8px 32px hsl(225 39% 2% / 0.6);
 
     --radius: 0.75rem;
 

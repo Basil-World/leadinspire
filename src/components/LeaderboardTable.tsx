@@ -57,14 +57,61 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {filteredStudents.map((student, index) => (
         <div
           key={student.id}
-          className={`${getRankStyles(student.rank)} rounded-xl p-6 transition-all duration-300 hover:scale-[1.02] animate-slide-up`}
+          className={`${getRankStyles(student.rank)} rounded-xl p-4 sm:p-6 transition-all duration-300 hover:scale-[1.01] sm:hover:scale-[1.02] animate-slide-up`}
           style={{ animationDelay: `${index * 0.1}s` }}
         >
-          <div className="flex items-center justify-between">
+          {/* Mobile Layout */}
+          <div className="block sm:hidden">
+            {/* Top Row - Rank and Name */}
+            <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center gap-2">
+                {getRankIcon(student.rank)}
+                <span className={`text-xl font-bold ${
+                  student.rank <= 3 ? 'text-glow' : ''
+                }`}>
+                  #{student.rank}
+                </span>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-foreground">
+                  {student.name}
+                </h3>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-primary text-glow">
+                  {student.totalScore}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Points
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Row - Weekly Scores */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Weekly Scores</span>
+                {getTrendIcon(student.trend)}
+              </div>
+              <div className="flex items-center gap-1">
+                {student.weeklyScores.map((score, weekIndex) => (
+                  <div
+                    key={weekIndex}
+                    className="glass-intense rounded-md px-2 py-1 text-xs font-medium min-w-[35px] text-center"
+                  >
+                    {score}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Layout */}
+          <div className="hidden sm:flex items-center justify-between">
             {/* Rank and Name */}
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">

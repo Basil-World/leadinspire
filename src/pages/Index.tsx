@@ -4,7 +4,7 @@ import LeaderboardHeader from '@/components/LeaderboardHeader';
 import LeaderboardTable from '@/components/LeaderboardTable';
 import { getLeaderboardData } from '@/data/mockLeaderboardData';
 import { useToast } from '@/hooks/use-toast';
-import starfieldBg from '@/assets/starfield-bg.jpg';
+import starfieldBgDark from '@/assets/starfield-bg-dark.jpg';
 
 interface Student {
   id: string;
@@ -80,7 +80,7 @@ const Index = () => {
       <div 
         className="fixed inset-0 z-0"
         style={{
-          backgroundImage: `url(${starfieldBg})`,
+          backgroundImage: `url(${starfieldBgDark})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
@@ -89,7 +89,7 @@ const Index = () => {
       <Starfield />
       
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 py-8">
+      <div className="relative z-10 container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
         <LeaderboardHeader
           selectedClass={selectedClass}
           onClassChange={setSelectedClass}
@@ -99,9 +99,9 @@ const Index = () => {
         />
 
         {loading ? (
-          <div className="glass rounded-xl p-12 text-center animate-glow-pulse">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-lg text-muted-foreground">Loading leaderboard data...</p>
+          <div className="glass rounded-xl p-8 sm:p-12 text-center animate-glow-pulse">
+            <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-base sm:text-lg text-muted-foreground">Loading leaderboard data...</p>
           </div>
         ) : (
           <LeaderboardTable
@@ -111,8 +111,8 @@ const Index = () => {
         )}
 
         {/* Footer */}
-        <div className="mt-16 text-center">
-          <p className="text-sm text-muted-foreground">
+        <div className="mt-12 sm:mt-16 text-center px-4">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Last updated: {new Date().toLocaleString()}
           </p>
           <p className="text-xs text-muted-foreground mt-2">

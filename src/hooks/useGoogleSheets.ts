@@ -21,7 +21,7 @@ export const useGoogleSheets = (classType: 'plus-one' | 'plus-two'): UseGoogleSh
 
   const fetchData = useCallback(async () => {
     if (!isConfigured) {
-      setError('Google Sheets is not configured. Please check your environment variables.');
+      setError('Sheets is not configured. Please check your environment variables.');
       setLoading(false);
       return;
     }
@@ -35,10 +35,10 @@ export const useGoogleSheets = (classType: 'plus-one' | 'plus-two'): UseGoogleSh
       
       toast({
         title: "Data loaded successfully",
-        description: `Loaded ${data.length} students from Google Sheets`,
+        description: `Loaded ${data.length} students`,
       });
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load data from Google Sheets';
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load data';
       setError(errorMessage);
       
       toast({

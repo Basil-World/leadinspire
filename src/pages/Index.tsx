@@ -27,7 +27,7 @@ const Index = () => {
     if (students.length === 0) {
       toast({
         title: "No data to export",
-        description: "Please wait for data to load or check your Google Sheets configuration.",
+        description: "Please wait for data to load.",
         variant: "destructive",
       });
       return;
@@ -154,7 +154,7 @@ const Index = () => {
           </p>
           <p className="text-xs text-gray-500 mt-2">
             {isConfigured 
-              ? "Data synchronized from Google Sheets" 
+              ? "Data synchronized" 
               : "Configure Google Sheets API to load live data"
             }
           </p>

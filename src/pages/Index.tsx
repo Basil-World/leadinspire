@@ -124,7 +124,7 @@ const Index = () => {
         ) : loading ? (
           <div className="bg-gray-800/50 rounded-xl p-8 sm:p-12 text-center animate-pulse border border-gray-600/30">
             <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-white mx-auto mb-4"></div>
-            <p className="text-base sm:text-lg text-gray-300">Loading leaderboard data from Google Sheets...</p>
+            <p className="text-base sm:text-lg text-gray-300">Loading leaderboard data...</p>
           </div>
         ) : students.length === 0 && selectedClass === 'plus-two' ? (
           <div className="bg-gray-800/50 rounded-xl p-8 sm:p-12 text-center border border-gray-600/30">

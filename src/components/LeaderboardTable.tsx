@@ -46,13 +46,13 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
   const getRankStyles = (rank: number) => {
     switch (rank) {
       case 1:
-        return 'bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border-yellow-400/30 glow-stellar';
+        return 'bg-gray-800/80 border-yellow-400/50 shadow-lg';
       case 2:
-        return 'bg-gradient-to-r from-gray-400/20 to-slate-400/20 border-gray-300/30';
+        return 'bg-gray-800/60 border-gray-400/50 shadow-md';
       case 3:
-        return 'bg-gradient-to-r from-amber-600/20 to-orange-600/20 border-amber-600/30';
+        return 'bg-gray-800/60 border-amber-600/50 shadow-md';
       default:
-        return 'glass';
+        return 'bg-gray-800/40 border-gray-600/30';
     }
   };
 
@@ -61,7 +61,7 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
       {filteredStudents.map((student, index) => (
         <div
           key={student.id}
-          className={`${getRankStyles(student.rank)} rounded-xl p-4 sm:p-6 transition-all duration-300 hover:scale-[1.01] sm:hover:scale-[1.02] animate-slide-up`}
+          className={`${getRankStyles(student.rank)} rounded-xl p-4 sm:p-6 transition-all duration-300 hover:scale-[1.01] sm:hover:scale-[1.02] animate-slide-up border backdrop-blur-sm`}
           style={{ animationDelay: `${index * 0.1}s` }}
         >
           {/* Mobile Layout */}
@@ -71,21 +71,21 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
               <div className="flex items-center gap-2">
                 {getRankIcon(student.rank)}
                 <span className={`text-xl font-bold ${
-                  student.rank <= 3 ? 'text-glow' : ''
+                  student.rank <= 3 ? 'text-yellow-400' : 'text-white'
                 }`}>
                   #{student.rank}
                 </span>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-foreground">
+                <h3 className="text-lg font-semibold text-white">
                   {student.name}
                 </h3>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-primary text-glow">
+                <div className="text-2xl font-bold text-white">
                   {student.totalScore}
                 </div>
-                <div className="text-xs text-muted-foreground">
+                <div className="text-xs text-gray-400">
                   Points
                 </div>
               </div>
@@ -119,16 +119,16 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
               <div className="flex items-center gap-2">
                 {getRankIcon(student.rank)}
                 <span className={`text-2xl font-bold ${
-                  student.rank <= 3 ? 'text-glow' : ''
+                  student.rank <= 3 ? 'text-yellow-400' : 'text-white'
                 }`}>
                   #{student.rank}
                 </span>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-foreground">
+                <h3 className="text-xl font-semibold text-white">
                   {student.name}
                 </h3>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2 text-sm text-gray-400">
                   <span>Total Score: {student.totalScore}</span>
                   {getTrendIcon(student.trend)}
                 </div>
@@ -138,11 +138,11 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
             {/* Weekly Scores - Hide if all zeros */}
             {student.weeklyScores.some(score => score > 0) && (
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground mr-2">Weekly:</span>
+                <span className="text-sm text-gray-400 mr-2">Weekly:</span>
                 {student.weeklyScores.map((score, weekIndex) => (
                   <div
                     key={weekIndex}
-                    className="glass-intense rounded-lg px-3 py-2 text-sm font-medium min-w-[50px] text-center"
+                    className="bg-gray-700/50 rounded-lg px-3 py-2 text-sm font-medium min-w-[50px] text-center text-white border border-gray-600/30"
                   >
                     {score}
                   </div>
@@ -152,10 +152,10 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
 
             {/* Total Score Highlight */}
             <div className="text-right">
-              <div className="text-3xl font-bold text-primary text-glow">
+              <div className="text-3xl font-bold text-white">
                 {student.totalScore}
               </div>
-              <div className="text-xs text-muted-foreground">
+              <div className="text-xs text-gray-400">
                 Total Points
               </div>
             </div>
@@ -164,9 +164,9 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
       ))}
 
       {filteredStudents.length === 0 && (
-        <div className="glass rounded-xl p-12 text-center">
-          <Star className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-lg text-muted-foreground">
+        <div className="bg-gray-800/50 rounded-xl p-12 text-center border border-gray-600/30">
+          <Star className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <p className="text-lg text-gray-300">
             No students found matching "{searchQuery}"
           </p>
         </div>

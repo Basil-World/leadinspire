@@ -91,23 +91,25 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
               </div>
             </div>
 
-            {/* Bottom Row - Weekly Scores */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span>Weekly Scores</span>
-                {getTrendIcon(student.trend)}
+            {/* Bottom Row - Weekly Scores - Hide if all zeros */}
+            {student.weeklyScores.some(score => score > 0) && (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <span>Weekly Scores</span>
+                  {getTrendIcon(student.trend)}
+                </div>
+                <div className="flex items-center gap-1">
+                  {student.weeklyScores.map((score, weekIndex) => (
+                    <div
+                      key={weekIndex}
+                      className="glass-intense rounded-md px-2 py-1 text-xs font-medium min-w-[35px] text-center"
+                    >
+                      {score}
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                {student.weeklyScores.map((score, weekIndex) => (
-                  <div
-                    key={weekIndex}
-                    className="glass-intense rounded-md px-2 py-1 text-xs font-medium min-w-[35px] text-center"
-                  >
-                    {score}
-                  </div>
-                ))}
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Desktop Layout */}
@@ -133,18 +135,20 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
               </div>
             </div>
 
-            {/* Weekly Scores */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground mr-2">Weekly:</span>
-              {student.weeklyScores.map((score, weekIndex) => (
-                <div
-                  key={weekIndex}
-                  className="glass-intense rounded-lg px-3 py-2 text-sm font-medium min-w-[50px] text-center"
-                >
-                  {score}
-                </div>
-              ))}
-            </div>
+            {/* Weekly Scores - Hide if all zeros */}
+            {student.weeklyScores.some(score => score > 0) && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground mr-2">Weekly:</span>
+                {student.weeklyScores.map((score, weekIndex) => (
+                  <div
+                    key={weekIndex}
+                    className="glass-intense rounded-lg px-3 py-2 text-sm font-medium min-w-[50px] text-center"
+                  >
+                    {score}
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Total Score Highlight */}
             <div className="text-right">

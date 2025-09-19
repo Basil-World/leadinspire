@@ -1,4 +1,4 @@
-import { Search, Download, ToggleLeft, ToggleRight } from 'lucide-react';
+import { Search, Download, ToggleLeft, ToggleRight, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -8,6 +8,9 @@ interface LeaderboardHeaderProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onExport: () => void;
+  onRefresh?: () => void;
+  isRefreshing?: boolean;
+  isConfigured?: boolean;
 }
 
 const LeaderboardHeader = ({
@@ -16,6 +19,9 @@ const LeaderboardHeader = ({
   searchQuery,
   onSearchChange,
   onExport,
+  onRefresh,
+  isRefreshing = false,
+  isConfigured = true,
 }: LeaderboardHeaderProps) => {
   return (
     <div className="glass rounded-2xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 animate-slide-up">
@@ -64,7 +70,7 @@ const LeaderboardHeader = ({
           </div>
         </div>
 
-        {/* Search and Export */}
+        {/* Search and Actions */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full lg:w-auto">
           <div className="relative flex-1 sm:flex-none">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -75,15 +81,30 @@ const LeaderboardHeader = ({
               className="pl-10 w-full sm:w-64 glass-intense border-border"
             />
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onExport}
-            className="glass-intense border-border hover:glow-stellar w-full sm:w-auto"
-          >
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
+          <div className="flex gap-2 w-full sm:w-auto">
+            {onRefresh && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onRefresh}
+                disabled={isRefreshing || !isConfigured}
+                className="glass-intense border-border hover:glow-stellar flex-1 sm:flex-none"
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+                {isRefreshing ? 'Refreshing...' : 'Refresh'}
+              </Button>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onExport}
+              disabled={!isConfigured}
+              className="glass-intense border-border hover:glow-stellar flex-1 sm:flex-none"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export
+            </Button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Sheets API Test</title>
+</head>
+<body>
+    <h1>Google Sheets API Test</h1>
+    <div id="result"></div>
+    
+    <script>
+        const API_KEY = 'AIzaSyDwoIjPNFJ9ZwzcVbHJTY2NzrHevQQlB84';
+        const SHEET_ID = '1pNVvIKe4vrDBz53hp_mcBRD5DiVvyKPjTrVgKszOQdM';
+        const RANGE = 'E6!A2:D59';
+        
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(RANGE)}?key=${API_KEY}`;
+        
+        console.log('Testing URL:', url);
+        
+        fetch(url)
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data:', data);
+                document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+            });
+    </script>
+</body>
+</html>

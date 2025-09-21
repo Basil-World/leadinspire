@@ -17,7 +17,11 @@ export const useGoogleSheets = (classType: 'plus-one' | 'plus-two'): UseGoogleSh
   const { toast } = useToast();
 
   // Check if Google Sheets is configured
-  const isConfigured = !!(import.meta.env.VITE_GOOGLE_SHEETS_API_KEY && import.meta.env.VITE_GOOGLE_SHEET_ID);
+  const isConfigured = !!(
+    import.meta.env.VITE_GOOGLE_SHEETS_API_KEY && 
+    import.meta.env.VITE_GOOGLE_SHEET_PLUS_ONE_ID && 
+    import.meta.env.VITE_GOOGLE_SHEET_PLUS_TWO_ID
+  );
 
   const fetchData = useCallback(async () => {
     if (!isConfigured) {

@@ -1,4 +1,4 @@
-import { Search, Download, ToggleLeft, ToggleRight, RefreshCw } from 'lucide-react';
+import { Search, Download, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -52,7 +52,6 @@ const LeaderboardHeader = ({
                   : 'text-gray-300 hover:bg-gray-700/50 hover:text-white'
               }`}
             >
-              {selectedClass === 'plus-one' ? <ToggleRight className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" /> : <ToggleLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />}
               Plus One
             </Button>
             <Button
@@ -65,7 +64,6 @@ const LeaderboardHeader = ({
                   : 'text-gray-300 hover:bg-gray-700/50 hover:text-white'
               }`}
             >
-              {selectedClass === 'plus-two' ? <ToggleRight className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" /> : <ToggleLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />}
               Plus Two
             </Button>
           </div>

@@ -66,28 +66,23 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
         >
           {/* Mobile Layout */}
           <div className="block sm:hidden">
-            {/* Top Row - Rank and Name */}
-            <div className="flex items-center gap-3 mb-3">
-              <div className="flex items-center gap-2">
-                {getRankIcon(student.rank)}
-                <span className={`text-xl font-bold ${
-                  student.rank <= 3 ? 'text-yellow-400' : 'text-white'
-                }`}>
-                  #{student.rank}
-                </span>
-              </div>
-              <div className="flex-1">
+            {/* Top Row - Rank, Name and Total */}
+            <div className="flex items-center justify-between w-full mb-3">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  {getRankIcon(student.rank)}
+                  <span className={`text-xl font-bold ${
+                    student.rank <= 3 ? 'text-yellow-400' : 'text-white'
+                  }`}>
+                    #{student.rank}
+                  </span>
+                </div>
                 <h3 className="text-lg font-semibold text-white">
                   {student.name}
                 </h3>
               </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-white">
-                  {student.totalScore}
-                </div>
-                <div className="text-xs text-gray-400">
-                  Points
-                </div>
+              <div className="text-2xl font-bold text-yellow-300">
+                {student.totalScore}
               </div>
             </div>
 
@@ -114,7 +109,7 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
 
           {/* Desktop Layout */}
           <div className="hidden sm:flex items-center justify-between">
-            {/* Rank and Name */}
+            {/* Rank, Name, and Total (B column) */}
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 {getRankIcon(student.rank)}
@@ -124,13 +119,17 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
                   #{student.rank}
                 </span>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-white">
-                  {student.name}
-                </h3>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <span>Total Score: {student.totalScore}</span>
-                  {getTrendIcon(student.trend)}
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-4">
+                  <h3 className="text-xl font-semibold text-white">
+                    {student.name}
+                  </h3>
+                  <div className="text-sm text-gray-400">
+                    {getTrendIcon(student.trend)}
+                  </div>
+                </div>
+                <div className="text-2xl font-bold text-yellow-300">
+                  {student.totalScore}
                 </div>
               </div>
             </div>
@@ -151,14 +150,8 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
             )}
 
             {/* Total Score Highlight */}
-            <div className="text-right">
-              <div className="text-3xl font-bold text-white">
-                {student.totalScore}
-              </div>
-              <div className="text-xs text-gray-400">
-                Total Points
-              </div>
-            </div>
+            {/* Removed: Total Score Highlight (now in B column) */
+            }
           </div>
         </div>
       ))}

@@ -105,7 +105,8 @@ const Index = () => {
               <h3 className="font-semibold mb-2 text-white">Required Environment Variables:</h3>
               <ul className="text-sm space-y-1 text-gray-300">
                 <li>• <code className="bg-gray-800 px-2 py-1 rounded text-gray-200">VITE_GOOGLE_SHEETS_API_KEY</code></li>
-                <li>• <code className="bg-gray-800 px-2 py-1 rounded text-gray-200">VITE_GOOGLE_SHEET_ID</code></li>
+                <li>• <code className="bg-gray-800 px-2 py-1 rounded text-gray-200">VITE_GOOGLE_SHEET_PLUS_ONE_ID</code></li>
+                <li>• <code className="bg-gray-800 px-2 py-1 rounded text-gray-200">VITE_GOOGLE_SHEET_PLUS_TWO_ID</code></li>
                 <li>• <code className="bg-gray-800 px-2 py-1 rounded text-gray-200">VITE_GOOGLE_SHEET_PLUS_ONE_RANGE</code> (optional)</li>
                 <li>• <code className="bg-gray-800 px-2 py-1 rounded text-gray-200">VITE_GOOGLE_SHEET_PLUS_TWO_RANGE</code> (optional)</li>
               </ul>

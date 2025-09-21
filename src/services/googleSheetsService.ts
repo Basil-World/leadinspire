@@ -1,8 +1,9 @@
 // Google Sheets API configuration
 const GOOGLE_SHEETS_API_KEY = import.meta.env.VITE_GOOGLE_SHEETS_API_KEY;
-const GOOGLE_SHEET_ID = import.meta.env.VITE_GOOGLE_SHEET_ID;
-const PLUS_ONE_RANGE = import.meta.env.VITE_GOOGLE_SHEET_PLUS_ONE_RANGE || 'Plus One!A1:G20';
-const PLUS_TWO_RANGE = import.meta.env.VITE_GOOGLE_SHEET_PLUS_TWO_RANGE || 'Plus Two!A1:G20';
+const PLUS_ONE_SHEET_ID = import.meta.env.VITE_GOOGLE_SHEET_PLUS_ONE_ID;
+const PLUS_TWO_SHEET_ID = import.meta.env.VITE_GOOGLE_SHEET_PLUS_TWO_ID;
+const PLUS_ONE_RANGE = import.meta.env.VITE_GOOGLE_SHEET_PLUS_ONE_RANGE || 'E6!A2:B59';
+const PLUS_TWO_RANGE = import.meta.env.VITE_GOOGLE_SHEET_PLUS_TWO_RANGE || 'E6!A2:B59';
 
 export interface Student {
   id: string;
@@ -28,16 +29,21 @@ export interface GoogleSheetsRow {
  */
 export const fetchGoogleSheetsData = async (classType: 'plus-one' | 'plus-two'): Promise<Student[]> => {
   try {
-    if (!GOOGLE_SHEETS_API_KEY || !GOOGLE_SHEET_ID) {
+    if (!GOOGLE_SHEETS_API_KEY || !PLUS_ONE_SHEET_ID || !PLUS_TWO_SHEET_ID) {
       throw new Error('Google Sheets API configuration is missing. Please check your environment variables.');
     }
 
-    // Fetch only student names (A2:A59) and total marks (D2:D59)
+    const sheetId = classType === 'plus-one' ? PLUS_ONE_SHEET_ID : PLUS_TWO_SHEET_ID;
+    const range = classType === 'plus-one' ? PLUS_ONE_RANGE : PLUS_TWO_RANGE;
+    
     const ranges = [
-      'E6!A2:D59', // Your actual sheet name with student data range
-      'E6!A2:A59,D2:D59', // Alternative format for name and total columns
-      'E6!A:D', // Fallback to all columns
-      'A2:D59' // Fallback to first sheet
+      range,
+      classType === 'plus-one' 
+        ? 'E6!A2:B60'  // Fallback for plus-one (up to 60 rows)
+        : 'E6!A2:B74', // Fallback for plus-two (up to 74 rows)
+      classType === 'plus-one'
+        ? 'A2:B60'     // Another fallback for plus-one
+        : 'A2:B74'     // Another fallback for plus-two
     ];
 
     let rows = null;
@@ -45,7 +51,7 @@ export const fetchGoogleSheetsData = async (classType: 'plus-one' | 'plus-two'):
 
     for (const range of ranges) {
       try {
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/${encodeURIComponent(range)}?key=${GOOGLE_SHEETS_API_KEY}`;
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(range)}?key=${GOOGLE_SHEETS_API_KEY}`;
         
         console.log('Trying range:', range);
         console.log('URL:', url);
@@ -84,8 +90,8 @@ export const fetchGoogleSheetsData = async (classType: 'plus-one' | 'plus-two'):
     const students: Student[] = rows
       .map((row, index) => {
         try {
-          // Format: [Name, Units and Dimension, Some Basic Concepts, Total]
-          const [name, , , totalScore] = row;
+          // Format: [Name, Total]
+          const [name, totalScore] = row;
           
           if (!name || name.toString().trim() === '') return null; // Skip empty rows
           
@@ -147,8 +153,12 @@ export const validateGoogleSheetsConfig = (): { isValid: boolean; errors: string
     errors.push('VITE_GOOGLE_SHEETS_API_KEY is not set');
   }
   
-  if (!GOOGLE_SHEET_ID) {
-    errors.push('VITE_GOOGLE_SHEET_ID is not set');
+  if (!PLUS_ONE_SHEET_ID) {
+    errors.push('VITE_GOOGLE_SHEET_PLUS_ONE_ID is not set');
+  }
+
+  if (!PLUS_TWO_SHEET_ID) {
+    errors.push('VITE_GOOGLE_SHEET_PLUS_TWO_ID is not set');
   }
   
   return {
@@ -165,7 +175,8 @@ export const getConfigStatus = () => {
   return {
     isConfigured: validation.isValid,
     errors: validation.errors,
-    sheetId: GOOGLE_SHEET_ID ? `${GOOGLE_SHEET_ID.substring(0, 8)}...` : 'Not set',
+    plusOneSheetId: PLUS_ONE_SHEET_ID ? `${PLUS_ONE_SHEET_ID.substring(0, 8)}...` : 'Not set',
+    plusTwoSheetId: PLUS_TWO_SHEET_ID ? `${PLUS_TWO_SHEET_ID.substring(0, 8)}...` : 'Not set',
     apiKey: GOOGLE_SHEETS_API_KEY ? `${GOOGLE_SHEETS_API_KEY.substring(0, 8)}...` : 'Not set',
   };
 };

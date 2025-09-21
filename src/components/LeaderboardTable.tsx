@@ -1,4 +1,8 @@
 import { Trophy, Medal, Award, Star, TrendingUp } from 'lucide-react';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { fetchStudentChapterDetails, StudentChapterDetails } from '@/services/googleSheetsService';
 
 interface Student {
   id: string;
@@ -12,9 +16,37 @@ interface Student {
 interface LeaderboardTableProps {
   students: Student[];
   searchQuery: string;
+  classType: 'plus-one' | 'plus-two';
 }
 
-const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
+const LeaderboardTable = ({ students, searchQuery, classType }: LeaderboardTableProps) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [loadingDetails, setLoadingDetails] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [chapterDetails, setChapterDetails] = useState<StudentChapterDetails | null>(null);
+  const [detailsError, setDetailsError] = useState<string | null>(null);
+
+  const openStudentDetails = async (student: Student) => {
+    setSelectedStudent(student);
+    setDialogOpen(true);
+    setLoadingDetails(true);
+    setDetailsError(null);
+    setChapterDetails(null);
+    try {
+      const details = await fetchStudentChapterDetails(classType, student.name);
+      if (!details) {
+        setDetailsError('No chapter data found for this student.');
+      } else {
+        setChapterDetails(details);
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Failed to load details';
+      setDetailsError(msg);
+    } finally {
+      setLoadingDetails(false);
+    }
+  };
+
   const filteredStudents = students.filter(student =>
     student.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -61,8 +93,9 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
       {filteredStudents.map((student, index) => (
         <div
           key={student.id}
-          className={`${getRankStyles(student.rank)} rounded-xl p-4 sm:p-6 transition-all duration-300 hover:scale-[1.01] sm:hover:scale-[1.02] animate-slide-up border backdrop-blur-sm`}
+          className={`${getRankStyles(student.rank)} rounded-xl p-4 sm:p-6 transition-all duration-300 hover:scale-[1.01] sm:hover:scale-[1.02] animate-slide-up border backdrop-blur-sm cursor-pointer`}
           style={{ animationDelay: `${index * 0.1}s` }}
+          onClick={() => openStudentDetails(student)}
         >
           {/* Mobile Layout */}
           <div className="block sm:hidden">
@@ -148,10 +181,6 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
                 ))}
               </div>
             )}
-
-            {/* Total Score Highlight */}
-            {/* Removed: Total Score Highlight (now in B column) */
-            }
           </div>
         </div>
       ))}
@@ -164,6 +193,54 @@ const LeaderboardTable = ({ students, searchQuery }: LeaderboardTableProps) => {
           </p>
         </div>
       )}
+
+      {/* Details Dialog */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="bg-gray-900 text-white border border-gray-700">
+          <DialogHeader>
+            <DialogTitle>
+              {selectedStudent ? `${selectedStudent.name} — Chapter-wise Marks` : 'Chapter-wise Marks'}
+            </DialogTitle>
+            <DialogDescription className="text-gray-400">
+              {selectedStudent ? `Rank #${selectedStudent.rank} • Total: ${selectedStudent.totalScore}` : ''}
+            </DialogDescription>
+          </DialogHeader>
+
+          {loadingDetails && (
+            <div className="py-6 text-center">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white mx-auto mb-4"></div>
+              <p className="text-gray-300">Loading chapter details…</p>
+            </div>
+          )}
+
+          {!loadingDetails && detailsError && (
+            <div className="py-4 bg-red-500/10 text-red-300 border border-red-500/30 rounded-md px-4">
+              {detailsError}
+            </div>
+          )}
+
+          {!loadingDetails && chapterDetails && (
+            <div className="mt-2">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-2/3 text-gray-300">Chapter</TableHead>
+                    <TableHead className="w-1/3 text-right text-gray-300">Score</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {chapterDetails.chapters.map((c, i) => (
+                    <TableRow key={i} className="border-gray-800">
+                      <TableCell className="text-white">{c.chapter || `Chapter ${i + 1}`}</TableCell>
+                      <TableCell className="text-right font-medium text-yellow-300">{c.score}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -14,6 +14,12 @@ export interface Student {
   trend: 'up' | 'down' | 'stable';
 }
 
+export interface StudentChapterDetails {
+  name: string;
+  totalScore?: number;
+  chapters: { chapter: string; score: number }[];
+}
+
 export interface GoogleSheetsRow {
   name: string;
   week1: number;
@@ -108,6 +114,7 @@ export const fetchGoogleSheetsData = async (classType: 'plus-one' | 'plus-two'):
             rank: 0, // Will be calculated after sorting
             trend: 'stable' as const, // Will be calculated based on previous data
           };
+
         } catch (error) {
           console.warn(`Error processing row ${index + 1}:`, error);
           return null;
@@ -141,6 +148,84 @@ export const fetchGoogleSheetsData = async (classType: 'plus-one' | 'plus-two'):
     console.error('Error fetching Google Sheets data:', error);
     throw new Error(`Failed to fetch data from Google Sheets: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
+};
+
+/**
+ * Fetch detailed chapter-wise marks for a single student.
+ * Assumptions based on provided sheet layout:
+ * - Row 1 has chapter headers from column C to Z (C1:Z1)
+ * - Column A has student names, column B may have total, columns C..Z have chapter marks
+ * - Data rows start at row 2
+ */
+export const fetchStudentChapterDetails = async (
+  classType: 'plus-one' | 'plus-two',
+  studentName: string
+): Promise<StudentChapterDetails | null> => {
+  if (!GOOGLE_SHEETS_API_KEY || !PLUS_ONE_SHEET_ID || !PLUS_TWO_SHEET_ID) {
+    throw new Error('Google Sheets API configuration is missing. Please check your environment variables.');
+  }
+
+  const sheetId = classType === 'plus-one' ? PLUS_ONE_SHEET_ID : PLUS_TWO_SHEET_ID;
+
+  // We fetch a generous range to cover typical data sizes
+  const headerRange = 'C1:Z1';
+  const dataRange = 'A2:Z500';
+
+  // 1) Fetch headers for chapters
+  const headersRes = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(headerRange)}?key=${GOOGLE_SHEETS_API_KEY}`
+  );
+  if (!headersRes.ok) {
+    const err = await headersRes.json().catch(() => ({} as any));
+    throw new Error(`Failed to load chapter headers: ${err.error?.message || headersRes.statusText}`);
+  }
+  const headersJson = await headersRes.json();
+  const headerRow: string[] = (headersJson.values?.[0] || []).map((h: any) => (h ?? '').toString().trim());
+
+  // 2) Fetch data rows
+  const dataRes = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(dataRange)}?key=${GOOGLE_SHEETS_API_KEY}`
+  );
+  if (!dataRes.ok) {
+    const err = await dataRes.json().catch(() => ({} as any));
+    throw new Error(`Failed to load student data: ${err.error?.message || dataRes.statusText}`);
+  }
+  const dataJson = await dataRes.json();
+  const rows: any[][] = dataJson.values || [];
+
+  // Try to find the student's row. Prefer exact match in column A (index 0). Fallback to case-insensitive trim.
+  const normalizedTarget = studentName.trim().toLowerCase();
+  const row = rows.find(r => (r?.[0]?.toString().trim().toLowerCase() || '') === normalizedTarget);
+  if (!row) {
+    // Try column B as a fallback for name if needed
+    const rowB = rows.find(r => (r?.[1]?.toString().trim().toLowerCase() || '') === normalizedTarget);
+    if (!rowB) return null;
+    // Use rowB and treat B as name
+    const totalMaybe = rowB[1];
+    const chapterValues = rowB.slice(2, 26); // C..Z -> indexes 2..25
+    const chapters = headerRow.map((chapter, i) => ({
+      chapter: chapter || `Chapter ${i + 1}`,
+      score: parseFloat(chapterValues[i]) || 0,
+    }));
+    return {
+      name: studentName,
+      totalScore: parseFloat(totalMaybe) || undefined,
+      chapters,
+    };
+  }
+
+  const totalMaybe = row[1]; // Column B may contain total
+  const chapterValues = row.slice(2, 26); // C..Z -> indexes 2..25
+  const chapters = headerRow.map((chapter, i) => ({
+    chapter: chapter || `Chapter ${i + 1}`,
+    score: parseFloat(chapterValues[i]) || 0,
+  }));
+
+  return {
+    name: studentName,
+    totalScore: parseFloat(totalMaybe) || undefined,
+    chapters,
+  };
 };
 
 /**

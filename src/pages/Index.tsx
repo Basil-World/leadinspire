@@ -145,6 +145,7 @@ const Index = () => {
           <LeaderboardTable
             students={students}
             searchQuery={searchQuery}
+            classType={selectedClass}
           />
         )}
 
